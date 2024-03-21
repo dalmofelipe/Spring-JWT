@@ -46,15 +46,15 @@ public class SecurityConfig  {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(new AuthTokenFilter(this.tokenService, this.userRepository),
-                    UsernamePasswordAuthenticationFilter.class)
+                UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests((authorize) -> authorize
-                    .requestMatchers("error").permitAll()
-                    .requestMatchers("/admin").hasAuthority("ADMIN")//.hasRole("ADMIN")
-                    .requestMatchers("/roles/**").hasAuthority("ADMIN")
-                    .requestMatchers("/users").permitAll()//.hasRole("USER")
-                    .requestMatchers("/users/{id}/role").hasAnyAuthority("SET_USER_ROLE", "ADMIN")
-                    .requestMatchers("/auth/**").permitAll()
-                    .requestMatchers("/h2/**").permitAll()
+                .requestMatchers("error").permitAll()
+                .requestMatchers("/admin").hasAuthority("ADMIN")//.hasRole("ADMIN")
+                .requestMatchers("/roles/**").hasAuthority("ADMIN")
+                .requestMatchers("/users").permitAll()//.hasRole("USER")
+                .requestMatchers("/users/{id}/role").hasAnyAuthority("SET_ROLE", "ADMIN")
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/h2/**").permitAll()
             )
             .headers((header) -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         return http.build();
