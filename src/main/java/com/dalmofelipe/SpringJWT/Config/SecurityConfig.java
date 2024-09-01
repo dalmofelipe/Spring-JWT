@@ -45,16 +45,16 @@ public class SecurityConfig  {
             .cors(AbstractHttpConfigurer::disable)
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(new AuthTokenFilter(this.tokenService, this.userRepository),
-                UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new AuthTokenFilter(this.tokenService, this.userRepository), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("error").permitAll()
                 .requestMatchers("/admin").hasAuthority("ADMIN")//.hasRole("ADMIN")
                 .requestMatchers("/roles/**").hasAuthority("ADMIN")
-                .requestMatchers("/users").permitAll()//.hasRole("USER")
                 .requestMatchers("/users/{id}/role").hasAnyAuthority("SET_ROLE", "ADMIN")
+                .requestMatchers("/users").permitAll()//.hasRole("USER")
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/h2/**").permitAll()
+                .requestMatchers("error").permitAll()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
             )
             .headers((header) -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         return http.build();

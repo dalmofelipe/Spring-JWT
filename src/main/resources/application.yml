@@ -5,6 +5,11 @@ server:
     include-stacktrace: never
 
 spring:
+  doc:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui
   datasource:
     url: jdbc:h2:mem:devdb;NON_KEYWORDS=USER;MODE=LEGACY
     driver-class-name: org.h2.Driver

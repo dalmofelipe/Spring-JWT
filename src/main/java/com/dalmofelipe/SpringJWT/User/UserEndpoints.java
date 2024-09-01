@@ -2,6 +2,10 @@ package com.dalmofelipe.SpringJWT.User;
 
 import com.dalmofelipe.SpringJWT.Exceptions.ApiError;
 import com.dalmofelipe.SpringJWT.Role.RoleRecord;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +23,8 @@ public class UserEndpoints {
     @Autowired
     private UserService userService;
 
-    
+    @Operation(summary = "Obter todos os usuários", description = "Retorna uma lista de todos os usuários cadastrados")
+    @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso")
     @GetMapping
     public ResponseEntity<List<User>> listUsers() {
         return ResponseEntity.ok().body(this.userRepository.findAll());
