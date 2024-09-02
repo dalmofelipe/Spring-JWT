@@ -1,9 +1,0 @@
-- [ ] logout para invalidar um token ativo
-- [ ] rota para microservicos externos fazer validação de token, usuário, roles e routes permitidas
-- [ ] Mover logica do toAuthToken para controller do login
-- [ ] implementar Mappers
-- [ ] Validar cadastro do usuário via email
-- [ ] Implementar Testes com JUnit pelo menos
-- [ ] Completar operações do CRUD de ROLES
-- [ ] Containerizar API
-- [ ] Helm Chart
