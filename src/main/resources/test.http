@@ -1,15 +1,3 @@
-### Scenario - O administrador concedera permissão a um novo usuário
-### de modo que tenha permissão de configurar ROLES em outros usuários
-
-### 1. ADMIN faz login recenbendo token de acesso
-### 2. ADMIN criar uma nova ROLE - SET_USER_ROLE (somente ADMIN podem criar novas ROLES) 
-### 3. NOVO USUÁRIO se registra na API - Rota liberada para todos 
-### 4. ADMIN atribui a ROLE SET_USER_ROLE ao NOVO USUÁRIO
-### 5. ADMIN cria nova role MODERATOR
-### 6. NOVO USUÁRIO loga na API
-### 7. NOVO USUÁRIO (id=2) atribui a role MODERATOR ao ADMIN (id=1)
-
-
 @host=http://localhost:8000
 
 
@@ -17,6 +5,8 @@
 ### Lista todos usuários, deve retornar uma conta de admin
 GET {{host}}/users HTTP/1.1
 
+### Lista todos usuários, deve retornar uma conta de admin
+GET {{host}}/users/1 HTTP/1.1
 
 
 ### 1. ADMIN faz login recenbendo token de acesso
@@ -33,14 +23,14 @@ Content-Type: application/json
 
 
 
-### 2. ADMIN criar uma nova ROLE: SET_USER_ROLE
+### 2. ADMIN criar uma nova ROLE: SET_ROLE
 ### Somente Administradores podem criar novas ROLES
 POST {{host}}/roles HTTP/1.1
 Authorization: {{admin_bearer_token}}
 Content-Type: application/json
 
 {
-    "name": "SET_USER_ROLE"
+    "name": "SET_ROLE"
 }
 
 
@@ -62,13 +52,13 @@ GET {{host}}/users HTTP/1.1
 
 
 
-### 4. ADMIN atribui a ROLE SET_USER_ROLE ao NOVO USUÁRIO (id=2)
+### 4. ADMIN atribui a ROLE SET_ROLE ao NOVO USUÁRIO (id=2)
 POST {{host}}/users/2/role HTTP/1.1
 Authorization: {{admin_bearer_token}}
 Content-Type: application/json
 
 {
-    "name": "SET_USER_ROLE"
+    "name": "SET_ROLE"
 }
 
 

@@ -1,15 +1,7 @@
 package com.dalmofelipe.SpringJWT.Auth;
 
-import com.dalmofelipe.SpringJWT.Auth.dtos.RegisterDTO;
-import com.dalmofelipe.SpringJWT.Exceptions.ApiError;
-import com.dalmofelipe.SpringJWT.User.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.dalmofelipe.SpringJWT.Auth.dtos.LoginDTO;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,9 +9,24 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.dalmofelipe.SpringJWT.Auth.dtos.LoginDTO;
+import com.dalmofelipe.SpringJWT.Auth.dtos.RegisterDTO;
+import com.dalmofelipe.SpringJWT.Exceptions.ApiError;
+import com.dalmofelipe.SpringJWT.User.User;
+import com.dalmofelipe.SpringJWT.User.UserService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Auth", description = "Endpoints para gestão de acessos")
 public class AuthEndpoint {
 
     @Autowired
@@ -31,7 +38,21 @@ public class AuthEndpoint {
     @Autowired
     private UserService userService;
 
-    
+
+    @Operation(
+        summary = "Login", 
+        description = "Logar para obter token de acesso"
+    )
+    @ApiResponse(
+        responseCode = "200", 
+        description = "Retorna TOKEN de acesso as rotas restritas",
+        content = {
+            @Content(
+                mediaType = "text/plain;charset=UTF-8", 
+                schema = @Schema(implementation = String.class)
+            )
+        }
+    )
     @PostMapping("/login")
     public ResponseEntity<Object> login(@Validated @RequestBody LoginDTO login) {
 
@@ -56,6 +77,20 @@ public class AuthEndpoint {
         }
     }
 
+    @Operation(
+        summary = "Registrar novo Usuário", 
+        description = "Cadastro de novos usuários"
+    )
+    @ApiResponse(
+        responseCode = "200", 
+        description = "Retorna novo usuário cadastrado",
+        content = {
+            @Content(
+                mediaType = "application/json", 
+                schema = @Schema(implementation = User.class)
+            )
+        }
+    )
     @PostMapping("/register")
     public ResponseEntity<Object> register(@Validated @RequestBody RegisterDTO dto) {
         try {
@@ -66,8 +101,8 @@ public class AuthEndpoint {
             err.setMessage(e.getMessage());
 
             return ResponseEntity
-                    .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .body(err);
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(err);
         }
     }
 }
