@@ -48,12 +48,13 @@ public class SecurityConfig  {
             .addFilterBefore(new AuthTokenFilter(this.tokenService, this.userRepository), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/admin").hasAuthority("ADMIN")//.hasRole("ADMIN")
-                .requestMatchers("/roles/**").hasAuthority("ADMIN")
-                .requestMatchers("/users/{id}/role").hasAnyAuthority("SET_ROLE", "ADMIN")
-                .requestMatchers("/users").permitAll()//.hasRole("USER")
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/h2/**").permitAll()
                 .requestMatchers("error").permitAll()
+                .requestMatchers("/h2/**").permitAll()
+                .requestMatchers("/users").permitAll()//.hasRole("USER")
+                .requestMatchers("/users/*").permitAll()//.hasRole("USER")
+                .requestMatchers("/users/*/role").hasAnyAuthority("SET_ROLE", "ADMIN")
+                .requestMatchers("/roles/**").hasAuthority("ADMIN")
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
             )
             .headers((header) -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));

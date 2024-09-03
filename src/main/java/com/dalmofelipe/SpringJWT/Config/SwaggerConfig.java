@@ -26,13 +26,13 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
             .info(new Info()
-                .title("Título da API")
-                .version("1.0")
-                .description("Descrição da API")
+                .title("Spring JWT")
+                .version("0.1.0")
+                .description("Teste Spring Boot 3 & Spring Security 6")
                 .contact(new Contact()
                     .name("Dalmo Felipe")
-                    .url("http://seusite.com")
-                    .email("seuemail@dominio.com")))
+                    .url("http://github.com/dalmofelipe")
+                    .email("dalmofelipe.dev@gmail.com")))
             .addSecurityItem(new SecurityRequirement()
                 .addList("Bearer Token"))
             .components(new io.swagger.v3.oas.models.Components()
@@ -40,5 +40,6 @@ public class SwaggerConfig {
                     .type(Type.HTTP)
                         .scheme("bearer")
                         .bearerFormat("JWT")));
+
     }
 }

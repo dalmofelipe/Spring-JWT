@@ -1,5 +1,6 @@
 package com.dalmofelipe.SpringJWT.User;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,15 @@ public class UserService {
     @Autowired
     private UserPasswordEncoder userPasswordEncoder;
 
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+
+    public Optional<User> findByID(Long id) {
+        return userRepository.findById(id);
+    }
 
     public User saveUser(RegisterDTO dto) {
         Optional<User> userOpt = this.userRepository.findByEmail(dto.getEmail());
