@@ -45,7 +45,8 @@ public class SecurityConfig  {
             .cors(AbstractHttpConfigurer::disable)
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(new AuthTokenFilter(this.tokenService, this.userRepository), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new AuthTokenFilter(this.tokenService, this.userRepository), 
+                UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/admin").hasAuthority("ADMIN")//.hasRole("ADMIN")
                 .requestMatchers("/auth/**").permitAll()

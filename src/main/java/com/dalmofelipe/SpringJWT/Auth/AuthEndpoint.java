@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -76,6 +77,50 @@ public class AuthEndpoint {
             return ResponseEntity.badRequest().body(err);
         }
     }
+
+
+    // @PostMapping("/logout")
+    // public ResponseEntity<?> logout(@RequestHeader("Authorization") String token)
+    // {
+    //     String jwt = token.substring(7); // Remove "Bearer "
+
+    //     long ttlMillis = tokenService.getExpirationTimeInMilis() - System.currentTimeMillis();
+        
+    //     if(ttlMillis > 0)
+    //     {
+    //         tokenService.blacklistToken(jwt, ttlMillis);
+    //         return ResponseEntity.ok().body("Logout realizado com sucesso");
+    //     }
+
+    //     return ResponseEntity.ok().body("Token já expirada, logout não necessário");   
+    // }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token)
+    {
+        String jwt = token.substring(7); // Remove "Bearer "
+
+        try {
+            if(tokenService.isTokenValid(jwt)) 
+            {
+                Long userId = tokenService.getSubject(jwt);
+                tokenService.blacklistToken(jwt);
+                return ResponseEntity.ok()
+                    .body("Logout realizado com sucesso para o usuário " + userId);
+            } 
+            else 
+            {
+                return ResponseEntity.ok()
+                    .body("Token inválida ou já expirada, logout não necessário");
+            }
+        } 
+        catch (Exception e) {
+            System.out.println("Erro ao processar token: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro ao processar token: " + e.getMessage());
+        }
+    }
+
 
     @Operation(
         summary = "Registrar novo Usuário", 
