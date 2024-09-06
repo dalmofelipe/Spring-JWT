@@ -1,4 +1,4 @@
-package com.dalmofelipe.SpringJWT.Exceptions;
+package com.dalmofelipe.SpringJWT.exceptions;
 
 import lombok.Data;
 

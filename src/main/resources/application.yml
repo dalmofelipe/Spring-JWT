@@ -35,7 +35,7 @@ jwt:
   token:
     expiration: 300000 # 5min
     # https://passwordsgenerator.net/
-    secret: cY%^U+Ku6s~k@EeJ,f;x9p]y*PX3TR{}
+    secret: cY%^U+Ku6s~k@EeJ,f;x9p]y*PX3TR{} 
   private:
     key: classpath:app.key
   public:

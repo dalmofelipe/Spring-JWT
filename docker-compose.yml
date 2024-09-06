@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   redis:
     image: redis:latest
@@ -7,7 +5,16 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    restart: always
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    depends_on:
+      - redis
+    ports:
+      - "5540:5540"
+    volumes:
+      - redis-insight:/data
 
 volumes:
   redis_data:
+  redis-insight:

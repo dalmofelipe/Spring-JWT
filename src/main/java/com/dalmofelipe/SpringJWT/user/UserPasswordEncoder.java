@@ -1,4 +1,4 @@
-package com.dalmofelipe.SpringJWT.User;
+package com.dalmofelipe.SpringJWT.user;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

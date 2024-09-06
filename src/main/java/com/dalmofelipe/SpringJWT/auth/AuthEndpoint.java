@@ -1,5 +1,7 @@
-package com.dalmofelipe.SpringJWT.Auth;
+package com.dalmofelipe.SpringJWT.auth;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dalmofelipe.SpringJWT.Auth.dtos.LoginDTO;
-import com.dalmofelipe.SpringJWT.Auth.dtos.RegisterDTO;
-import com.dalmofelipe.SpringJWT.Exceptions.ApiError;
-import com.dalmofelipe.SpringJWT.User.User;
-import com.dalmofelipe.SpringJWT.User.UserService;
+import com.dalmofelipe.SpringJWT.auth.dtos.LoginDTO;
+import com.dalmofelipe.SpringJWT.auth.dtos.RegisterDTO;
+import com.dalmofelipe.SpringJWT.exceptions.ApiError;
+import com.dalmofelipe.SpringJWT.user.User;
+import com.dalmofelipe.SpringJWT.user.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,6 +31,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/auth")
 @Tag(name = "Auth", description = "Endpoints para gestão de acessos")
 public class AuthEndpoint {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -99,7 +103,11 @@ public class AuthEndpoint {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String token)
     {
+        logger.debug("[AuthEndpoint::logout] String da token de entrada: {}", token);
+        
         String jwt = token.substring(7); // Remove "Bearer "
+
+        logger.debug("[AuthEndpoint::logout] Bearer removido : {}", jwt);
 
         try {
             if(tokenService.isTokenValid(jwt)) 

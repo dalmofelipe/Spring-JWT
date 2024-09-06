@@ -1,4 +1,4 @@
-package com.dalmofelipe.SpringJWT.Role;
+package com.dalmofelipe.SpringJWT.role;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;

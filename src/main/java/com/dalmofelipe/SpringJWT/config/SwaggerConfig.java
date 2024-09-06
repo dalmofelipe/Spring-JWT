@@ -1,4 +1,4 @@
-package com.dalmofelipe.SpringJWT.Config;
+package com.dalmofelipe.SpringJWT.config;
 
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;

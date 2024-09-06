@@ -1,17 +1,16 @@
-package com.dalmofelipe.SpringJWT.Auth;
+package com.dalmofelipe.SpringJWT.auth;
 
 import java.io.IOException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.dalmofelipe.SpringJWT.User.User;
-import com.dalmofelipe.SpringJWT.User.UserRepository;
+import com.dalmofelipe.SpringJWT.user.User;
+import com.dalmofelipe.SpringJWT.user.UserRepository;
 
 import io.netty.util.internal.StringUtil;
 import jakarta.servlet.FilterChain;
@@ -32,15 +31,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	}
 
     @Override
-    protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response, 
-            @NonNull FilterChain filterChain)
-                throws ServletException, IOException {
+    protected void doFilterInternal
+        (HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
+        throws ServletException, IOException {
 
         String tokenWithoutBearer = this.getTokenWithoutBearer(request);
-        logger.debug("Requisição recebida para: {}", request.getRequestURI());
-        logger.debug("Token extraída: {}", tokenWithoutBearer);
+        logger.debug("[AuthTokenFilter::doFilterInternal] Token Recebida: {}", tokenWithoutBearer);
        
         if(!StringUtil.isNullOrEmpty(tokenWithoutBearer) && tokenService.isTokenValid(tokenWithoutBearer))
         {
@@ -52,12 +48,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             else 
             {
                 this.doAuthUser(tokenWithoutBearer);
-                logger.debug("Usuário autenticado com sucesso");
+                logger.debug("Usuário autenticado");
             }
         }
         else
         {
-            logger.info("Token inválida");
+            logger.info("Token inválida ou nula");
             SecurityContextHolder.clearContext(); // Limpa a autenticação se a token for inválida
         }
 

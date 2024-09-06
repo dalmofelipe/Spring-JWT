@@ -1,4 +1,4 @@
-package com.dalmofelipe.SpringJWT.User;
+package com.dalmofelipe.SpringJWT.user;
 
 import java.util.Optional;
 

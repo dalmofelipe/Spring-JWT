@@ -1,4 +1,4 @@
-package com.dalmofelipe.SpringJWT.Auth;
+package com.dalmofelipe.SpringJWT.auth;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -11,7 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import com.dalmofelipe.SpringJWT.User.User;
+import com.dalmofelipe.SpringJWT.user.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
@@ -31,6 +31,8 @@ public class TokenService {
     //private static final SecretKey KEY = Jwts.SIG.HS256.key().build();
     private SecretKey MyKEY = null;
 
+    private StringBuilder strBuilder =
+        new StringBuilder().append("blacklist:");
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -44,8 +46,9 @@ public class TokenService {
     {
         User userLogged = (User) autheticate.getPrincipal();
         Date now = new Date();
-        Date expirationTime = 
-            new Date(now.getTime() + Long.parseLong(expirationTimeInMilis));
+        Date expirationTime = new Date(
+            now.getTime() + Long.parseLong(expirationTimeInMilis)
+        );
         
         this.MyKEY = getSecretKey();
 
@@ -76,27 +79,32 @@ public class TokenService {
         }
     }
 
-    public Long getSubject(String tokenWithoutBearer) {
+    public Long getSubject(String tokenWithoutBearer) 
+    {
         this.MyKEY = getSecretKey();
-        
+
         JwtParser jwtParser = Jwts.parser().verifyWith(MyKEY).build();
         Claims payload = jwtParser.parseSignedClaims(tokenWithoutBearer).getPayload();
         String subject = payload.getSubject();
+        
         return Long.parseLong(subject);
     }
 
-    public void blacklistToken(String token) 
+    public void blacklistToken(String tokenWithoutBearer) 
     {
         redisTemplate.opsForValue()
             .set(
-                "blacklist:" + token, "true", 
+                this.strBuilder.append(tokenWithoutBearer).toString(),
+                "true",
                 Long.parseLong(expirationTimeInMilis), 
                 java.util.concurrent.TimeUnit.MILLISECONDS
             );
     }
 
-    public boolean isTokenBlacklisted(String token) 
+    public boolean isTokenBlacklisted(String tokenWithoutBearer) 
     {
-        return Boolean.TRUE.equals(redisTemplate.hasKey(token));
+        return Boolean.TRUE.equals(redisTemplate.hasKey(
+            this.strBuilder.append(tokenWithoutBearer).toString())
+        );
     }
 }

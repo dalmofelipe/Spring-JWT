@@ -1,7 +1,6 @@
 @host=http://localhost:8000
 
 
-
 ###
 GET {{host}}/users HTTP/1.1
 

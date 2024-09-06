@@ -1,4 +1,4 @@
-package com.dalmofelipe.SpringJWT.Auth;
+package com.dalmofelipe.SpringJWT.auth;
 
 import java.util.Optional;
 
@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.dalmofelipe.SpringJWT.User.User;
-import com.dalmofelipe.SpringJWT.User.UserRepository;
+import com.dalmofelipe.SpringJWT.user.User;
+import com.dalmofelipe.SpringJWT.user.UserRepository;
 
 @Service
 public class AuthService implements UserDetailsService {
