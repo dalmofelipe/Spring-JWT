@@ -82,24 +82,6 @@ public class AuthEndpoint {
         }
     }
 
-
-    // @PostMapping("/logout")
-    // public ResponseEntity<?> logout(@RequestHeader("Authorization") String token)
-    // {
-    //     String jwt = token.substring(7); // Remove "Bearer "
-
-    //     long ttlMillis = tokenService.getExpirationTimeInMilis() - System.currentTimeMillis();
-        
-    //     if(ttlMillis > 0)
-    //     {
-    //         tokenService.blacklistToken(jwt, ttlMillis);
-    //         return ResponseEntity.ok().body("Logout realizado com sucesso");
-    //     }
-
-    //     return ResponseEntity.ok().body("Token já expirada, logout não necessário");   
-    // }
-
-
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String token)
     {
@@ -110,7 +92,7 @@ public class AuthEndpoint {
         logger.debug("[AuthEndpoint::logout] Bearer removido : {}", jwt);
 
         try {
-            if(tokenService.isTokenValid(jwt)) 
+            if(tokenService.isTokenValid(jwt) && !tokenService.isTokenBlacklisted(jwt))
             {
                 Long userId = tokenService.getSubject(jwt);
                 tokenService.blacklistToken(jwt);

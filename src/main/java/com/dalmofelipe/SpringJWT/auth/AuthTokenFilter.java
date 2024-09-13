@@ -31,28 +31,22 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	}
 
     @Override
-    protected void doFilterInternal
-        (HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
-        throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, 
+            FilterChain filterChain) 
+                throws ServletException, IOException {
 
         String tokenWithoutBearer = this.getTokenWithoutBearer(request);
         logger.debug("[AuthTokenFilter::doFilterInternal] Token Recebida: {}", tokenWithoutBearer);
        
-        if(!StringUtil.isNullOrEmpty(tokenWithoutBearer) && tokenService.isTokenValid(tokenWithoutBearer))
-        {
-            if (tokenService.isTokenBlacklisted(tokenWithoutBearer)) 
-            {
+        if(!StringUtil.isNullOrEmpty(tokenWithoutBearer) && tokenService.isTokenValid(tokenWithoutBearer)) {
+            if (tokenService.isTokenBlacklisted(tokenWithoutBearer)) {
                 SecurityContextHolder.clearContext(); // Limpa a autenticação
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            }
-            else 
-            {
+            } else {
                 this.doAuthUser(tokenWithoutBearer);
                 logger.debug("Usuário autenticado");
             }
-        }
-        else
-        {
+        } else {
             logger.info("Token inválida ou nula");
             SecurityContextHolder.clearContext(); // Limpa a autenticação se a token for inválida
         }
@@ -70,7 +64,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.getContext().setAuthentication(authetication);
     }
-
     
     private String getTokenWithoutBearer(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
@@ -81,5 +74,4 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         return token.substring(7);
     }
-
 }

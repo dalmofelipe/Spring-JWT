@@ -5,9 +5,10 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -28,22 +29,24 @@ public class TokenService {
     @Value("${jwt.token.secret}")
     private String secret;
 
-    //private static final SecretKey KEY = Jwts.SIG.HS256.key().build();
     private SecretKey MyKEY = null;
 
-    private StringBuilder strBuilder =
-        new StringBuilder().append("blacklist:");
-
-    @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+
+    public TokenService(RedisTemplate<String, String> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+    }
 
     private SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateJWT(Authentication autheticate) 
-    {
+    public String generateJWT(Authentication autheticate) {
         User userLogged = (User) autheticate.getPrincipal();
         Date now = new Date();
         Date expirationTime = new Date(
@@ -79,8 +82,7 @@ public class TokenService {
         }
     }
 
-    public Long getSubject(String tokenWithoutBearer) 
-    {
+    public Long getSubject(String tokenWithoutBearer) {
         this.MyKEY = getSecretKey();
 
         JwtParser jwtParser = Jwts.parser().verifyWith(MyKEY).build();
@@ -90,21 +92,12 @@ public class TokenService {
         return Long.parseLong(subject);
     }
 
-    public void blacklistToken(String tokenWithoutBearer) 
-    {
-        redisTemplate.opsForValue()
-            .set(
-                this.strBuilder.append(tokenWithoutBearer).toString(),
-                "true",
-                Long.parseLong(expirationTimeInMilis), 
-                java.util.concurrent.TimeUnit.MILLISECONDS
-            );
+    public void blacklistToken(String tokenWithoutBearer) {
+        redisTemplate.opsForValue().set("blacklist:"+tokenWithoutBearer, "true", 
+            Long.parseLong(expirationTimeInMilis), java.util.concurrent.TimeUnit.MILLISECONDS);
     }
 
-    public boolean isTokenBlacklisted(String tokenWithoutBearer) 
-    {
-        return Boolean.TRUE.equals(redisTemplate.hasKey(
-            this.strBuilder.append(tokenWithoutBearer).toString())
-        );
+    public boolean isTokenBlacklisted(String tokenWithoutBearer) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey("blacklist:"+tokenWithoutBearer));
     }
 }
