@@ -1,4 +1,4 @@
-package com.dalmofelipe.SpringJWT.Config;
+package com.dalmofelipe.SpringJWT.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,10 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.dalmofelipe.SpringJWT.Auth.AuthService;
-import com.dalmofelipe.SpringJWT.Auth.AuthTokenFilter;
-import com.dalmofelipe.SpringJWT.Auth.TokenService;
-import com.dalmofelipe.SpringJWT.User.UserRepository;
+import com.dalmofelipe.SpringJWT.auth.AuthService;
+import com.dalmofelipe.SpringJWT.auth.AuthTokenFilter;
+import com.dalmofelipe.SpringJWT.auth.TokenService;
+import com.dalmofelipe.SpringJWT.user.UserRepository;
 
 
 @Configuration
@@ -45,7 +45,8 @@ public class SecurityConfig  {
             .cors(AbstractHttpConfigurer::disable)
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(new AuthTokenFilter(this.tokenService, this.userRepository), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new AuthTokenFilter(this.tokenService, this.userRepository), 
+                UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/admin").hasAuthority("ADMIN")//.hasRole("ADMIN")
                 .requestMatchers("/auth/**").permitAll()

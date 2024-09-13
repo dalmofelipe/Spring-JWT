@@ -1,4 +1,4 @@
-package com.dalmofelipe.SpringJWT.Role;
+package com.dalmofelipe.SpringJWT.role;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

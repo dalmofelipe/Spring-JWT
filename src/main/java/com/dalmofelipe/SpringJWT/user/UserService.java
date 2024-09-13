@@ -1,4 +1,4 @@
-package com.dalmofelipe.SpringJWT.User;
+package com.dalmofelipe.SpringJWT.user;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import com.dalmofelipe.SpringJWT.Auth.dtos.RegisterDTO;
-import com.dalmofelipe.SpringJWT.Role.Role;
-import com.dalmofelipe.SpringJWT.Role.RoleRecord;
-import com.dalmofelipe.SpringJWT.Role.RoleRepository;
+import com.dalmofelipe.SpringJWT.auth.dtos.RegisterDTO;
+import com.dalmofelipe.SpringJWT.role.Role;
+import com.dalmofelipe.SpringJWT.role.RoleRecord;
+import com.dalmofelipe.SpringJWT.role.RoleRepository;
 
 @Service
 public class UserService {

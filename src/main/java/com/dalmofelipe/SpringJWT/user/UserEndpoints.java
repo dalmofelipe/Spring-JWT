@@ -1,4 +1,4 @@
-package com.dalmofelipe.SpringJWT.User;
+package com.dalmofelipe.SpringJWT.user;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dalmofelipe.SpringJWT.Exceptions.ApiError;
-import com.dalmofelipe.SpringJWT.Role.RoleRecord;
+import com.dalmofelipe.SpringJWT.exceptions.ApiError;
+import com.dalmofelipe.SpringJWT.role.RoleRecord;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
