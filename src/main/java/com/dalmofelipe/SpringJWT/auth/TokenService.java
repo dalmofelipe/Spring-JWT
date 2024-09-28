@@ -49,20 +49,13 @@ public class TokenService {
     public String generateJWT(Authentication autheticate) {
         User userLogged = (User) autheticate.getPrincipal();
         Date now = new Date();
-        Date expirationTime = new Date(
-            now.getTime() + Long.parseLong(expirationTimeInMilis)
-        );
+        Date expirationTime = new Date(now.getTime() + Long.parseLong(expirationTimeInMilis));
         
         this.MyKEY = getSecretKey();
 
-        String stringJWT = Jwts.builder()
-            .issuer("spring-jwt-app")
-            .subject(userLogged.getId().toString())
-            .claim("roles", userLogged.getAuthorities())
-            .issuedAt(now)
-            .expiration(expirationTime)
-            .signWith(MyKEY)
-            .compact();
+        String stringJWT = Jwts.builder().issuer("spring-jwt-app").subject(userLogged.getId().toString())
+            .claim("roles", userLogged.getAuthorities()).issuedAt(now).expiration(expirationTime)
+            .signWith(MyKEY).compact();
 
         this.isTokenValid(stringJWT);
 

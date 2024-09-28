@@ -38,7 +38,6 @@ public class SecurityConfig  {
     @Autowired
     private UserRepository userRepository;
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -62,29 +61,20 @@ public class SecurityConfig  {
         return http.build();
     }
 
-
     @Bean
     @Primary
-    public AuthenticationManagerBuilder configureAuthenticationManagerBuilder
-            (AuthenticationManagerBuilder authenticationManagerBuilder)
-                throws Exception {
-        authenticationManagerBuilder
-                .userDetailsService(authService).passwordEncoder(this.passwordEncoder());
+    public AuthenticationManagerBuilder configureAuthenticationManagerBuilder(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder.userDetailsService(authService).passwordEncoder(this.passwordEncoder());
         return authenticationManagerBuilder;
     }
 
-
     @Bean
-    public AuthenticationManager authenticationManager
-            (AuthenticationConfiguration authenticationConfiguration)
-                throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
     
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

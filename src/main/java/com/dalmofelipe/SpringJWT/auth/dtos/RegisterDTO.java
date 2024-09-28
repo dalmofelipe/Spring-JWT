@@ -19,7 +19,7 @@ public class RegisterDTO {
     @Email
     private String email;
 
-    @Size(min = 3, max = 50)
+    @Size(min = 6, max = 20)
     private String password;
 
     // TODO: implementar Mappers

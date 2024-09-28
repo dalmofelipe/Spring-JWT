@@ -4,6 +4,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -14,6 +15,7 @@ public class LoginDTO {
     private String email;
 
     @NotBlank
+    @Size(min = 6, max = 20, message = "a senha deve conter entre {min} e {max} caracteres")
     private String password;
 
     // TODO: remover isso daqui

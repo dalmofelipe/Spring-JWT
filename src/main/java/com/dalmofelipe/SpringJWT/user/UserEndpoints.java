@@ -3,7 +3,6 @@ package com.dalmofelipe.SpringJWT.user;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dalmofelipe.SpringJWT.exceptions.ApiError;
 import com.dalmofelipe.SpringJWT.role.RoleRecord;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,7 +62,7 @@ public class UserEndpoints {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         return userService.findByID(id).map((user) -> ResponseEntity.ok().body(user))
-            .orElseGet(() -> ResponseEntity.badRequest().build());
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 
@@ -90,17 +88,6 @@ public class UserEndpoints {
     @PostMapping("/{id}/role")
     public ResponseEntity<Object> setUserRole(@PathVariable(name = "id") Long id, 
             @RequestBody RoleRecord role) {
-
-        try {
-            return ResponseEntity.ok().body(this.userService.addUserRole(id, role));
-        } 
-        catch (RuntimeException e) {
-            var err = new ApiError();
-            err.setMessage(e.getMessage());
-
-            return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(err);
-        }
+        return ResponseEntity.ok().body(this.userService.addUserRole(id, role));
     }
 }

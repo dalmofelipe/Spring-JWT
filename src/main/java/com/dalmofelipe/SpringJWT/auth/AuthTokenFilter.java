@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.dalmofelipe.SpringJWT.exceptions.NotFoundException;
 import com.dalmofelipe.SpringJWT.user.User;
 import com.dalmofelipe.SpringJWT.user.UserRepository;
 
@@ -57,7 +58,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private void doAuthUser(String tokenWithoutBearer) {
         Long userId = this.tokenService.getSubject(tokenWithoutBearer);
         Optional<User> optional = this.userRepository.findByIdWithJoinFecth(userId);
-        User user = optional.orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        User user = optional.orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         UsernamePasswordAuthenticationToken authetication = 
             new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
@@ -69,6 +70,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         String token = request.getHeader("Authorization");
 
         if(token == null || token.isBlank() || !token.startsWith("Bearer ")) {
+            logger.info("[getTokenWithoutBearer] => Token inválida ou nula");
             return null;
         }
 
