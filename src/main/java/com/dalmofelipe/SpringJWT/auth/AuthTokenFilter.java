@@ -32,10 +32,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	}
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, 
-            FilterChain filterChain) 
-                throws ServletException, IOException {
-
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
+            throws ServletException, IOException {
         String tokenWithoutBearer = this.getTokenWithoutBearer(request);
         logger.debug("[AuthTokenFilter::doFilterInternal] Token Recebida: {}", tokenWithoutBearer);
        

@@ -21,11 +21,6 @@ Content-Type: application/json
 @admin_bearer_token = {{admin_login.response.body.*}}
 
 
-### LOGOUT
-POST {{host}}/auth/logout HTTP/1.1
-Authorization: {{admin_bearer_token}}
-
-
 ### LISTA TODAS ROLES
 GET {{host}}/roles HTTP/1.1
 Authorization: {{admin_bearer_token}}
@@ -112,3 +107,17 @@ Content-Type: application/json
 {
     "name": "MODERATOR"
 }
+
+
+
+### Lista todos usuários
+GET {{host}}/users HTTP/1.1
+
+
+
+
+
+### LOGOUT
+POST {{host}}/auth/logout HTTP/1.1
+Authorization: {{admin_bearer_token}}
+
